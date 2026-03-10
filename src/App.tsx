@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useProductos } from './lib/useProductos';
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 type Page = "home" | "services" | "about" | "catalog" | "contact";
@@ -1215,6 +1216,8 @@ function PlaceholderPage({ title, setPage }: { title: string; page: Page; setPag
 // ─── APP ─────────────────────────────────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState<Page>("home");
+  const { productos, loading, error } = useProductos(); 
+  console.log({ productos, loading, error }); 
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, [page]);
 
