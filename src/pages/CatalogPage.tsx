@@ -1,36 +1,45 @@
 import { useState } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
-
-const productos = [
-  { id: 1, nombre: "Producto 1", tipo: "Máquinas", precio: 100 },
-  { id: 2, nombre: "Producto 2", tipo: "Máquinas", precio: 200 },
-  { id: 3, nombre: "Producto 3", tipo: "Pesas", precio: 50 },
-  { id: 4, nombre: "Producto 4", tipo: "Pesas", precio: 150 },
-  { id: 5, nombre: "Producto 5", tipo: "Suplementos", precio: 30 },
-  { id: 6, nombre: "Producto 6", tipo: "Suplementos", precio: 80 },
-  { id: 7, nombre: "Producto 7", tipo: "Accesorios", precio: 20 },
-  { id: 8, nombre: "Producto 8", tipo: "Accesorios", precio: 60 },
-];
+import { useProductos } from "../lib/useProductos";
+import ProductCard from "../components/layout/ProductCard";
+import { Search, SlidersHorizontal, LayoutGrid, LayoutList } from "lucide-react";
 
 const tipos = ["Todos", "Máquinas", "Pesas", "Suplementos", "Accesorios"];
 
 export default function CatalogPage() {
+  const { productos, loading, error } = useProductos();
   const [busqueda, setBusqueda] = useState("");
   const [filtroAbierto, setFiltroAbierto] = useState(false);
   const [tipoActivo, setTipoActivo] = useState("Todos");
   const [ordenPrecio, setOrdenPrecio] = useState<"asc" | "desc" | null>(null);
+  const [vista, setVista] = useState<"grid" | "list">("grid");
 
   const productosFiltrados = productos
     .filter((p) => {
-      const coincideBusqueda = p.nombre.toLowerCase().includes(busqueda.toLowerCase());
-      const coincideTipo = tipoActivo === "Todos" || p.tipo === tipoActivo;
+      const q = busqueda.toLowerCase();
+      const coincideBusqueda =
+        p.fields.nombre?.toLowerCase()?.includes(q) ||
+        p.fields.marca?.toLowerCase()?.includes(q) ||
+        p.fields.categoria?.toLowerCase()?.includes(q);
+      const coincideTipo = tipoActivo === "Todos" || p.fields.categoria === tipoActivo;
       return coincideBusqueda && coincideTipo;
     })
     .sort((a, b) => {
-      if (ordenPrecio === "asc") return a.precio - b.precio;
-      if (ordenPrecio === "desc") return b.precio - a.precio;
+      if (ordenPrecio === "asc") return a.fields.nombre?.localeCompare(b.fields.nombre) ?? 0;
+      if (ordenPrecio === "desc") return b.fields.nombre?.localeCompare(a.fields.nombre) ?? 0;
       return 0;
     });
+
+  if (loading) return (
+    <div className="bg-black min-h-screen flex items-center justify-center">
+      <p className="text-white text-xl">Cargando productos...</p>
+    </div>
+  );
+
+  if (error) return (
+    <div className="bg-black min-h-screen flex items-center justify-center">
+      <p className="text-red-500 text-xl">Error al cargar productos.</p>
+    </div>
+  );
 
   return (
     <div className="bg-black min-h-screen flex flex-col">
@@ -45,7 +54,7 @@ export default function CatalogPage() {
         </div>
       </section>
 
-      {/* ── BUSCADOR + FILTRO ── */}
+      {/* ── BUSCADOR + VISTA + FILTRO ── */}
       <section className="px-6 pb-8">
         <div className="max-w-7xl mx-auto flex items-center gap-4 relative">
 
@@ -61,6 +70,26 @@ export default function CatalogPage() {
             />
           </div>
 
+          {/* Botón vista grid */}
+          <button
+            onClick={() => setVista("grid")}
+            className={`h-16 w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+              vista === "grid" ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
+            }`}
+          >
+            <LayoutGrid size={22} className="text-white" />
+          </button>
+
+          {/* Botón vista lista */}
+          <button
+            onClick={() => setVista("list")}
+            className={`h-16 w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+              vista === "list" ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
+            }`}
+          >
+            <LayoutList size={22} className="text-white" />
+          </button>
+
           {/* Botón filtro */}
           <button
             onClick={() => setFiltroAbierto(!filtroAbierto)}
@@ -74,8 +103,6 @@ export default function CatalogPage() {
           {/* Dropdown filtros */}
           {filtroAbierto && (
             <div className="absolute top-20 right-0 bg-neutral-800 rounded-xl p-5 z-50 w-64 flex flex-col gap-4 shadow-xl">
-
-              {/* Tipo */}
               <div>
                 <p className="text-white text-sm font-bold mb-2">Categoría</p>
                 <div className="flex flex-wrap gap-2">
@@ -94,10 +121,8 @@ export default function CatalogPage() {
                   ))}
                 </div>
               </div>
-
-              {/* Precio */}
               <div>
-                <p className="text-white text-sm font-bold mb-2">Precio</p>
+                <p className="text-white text-sm font-bold mb-2">Orden</p>
                 <div className="flex flex-col gap-2">
                   <button
                     onClick={() => setOrdenPrecio("asc")}
@@ -107,7 +132,7 @@ export default function CatalogPage() {
                         : "bg-neutral-700 text-white hover:bg-neutral-600"
                     }`}
                   >
-                    Precio: Menor a Mayor
+                    Nombre: A → Z
                   </button>
                   <button
                     onClick={() => setOrdenPrecio("desc")}
@@ -117,38 +142,30 @@ export default function CatalogPage() {
                         : "bg-neutral-700 text-white hover:bg-neutral-600"
                     }`}
                   >
-                    Precio: Mayor a Menor
+                    Nombre: Z → A
                   </button>
                 </div>
               </div>
-
-              {/* Limpiar filtros */}
               <button
                 onClick={() => { setTipoActivo("Todos"); setOrdenPrecio(null); }}
                 className="text-red-500 text-xs font-semibold hover:text-red-400 text-left"
               >
                 Limpiar filtros
               </button>
-
             </div>
           )}
         </div>
       </section>
 
-      {/* ── GRID DE PRODUCTOS ── */}
+      {/* ── PRODUCTOS ── */}
       <section className="px-6 pb-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className={
+          vista === "grid"
+            ? "max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+            : "max-w-7xl mx-auto flex flex-col gap-4"
+        }>
           {productosFiltrados.map((p) => (
-            <div key={p.id} className="bg-neutral-800 rounded-xl overflow-hidden">
-              <div className="bg-neutral-300 h-56 flex items-center justify-center">
-                <span className="text-black font-black text-2xl">Imagen</span>
-              </div>
-              <div className="p-4 flex flex-col gap-1">
-                <span className="text-red-500 text-sm font-semibold">{p.tipo}</span>
-                <span className="text-white text-base font-light">{p.nombre}</span>
-                <span className="text-white text-sm font-bold">${p.precio}</span>
-              </div>
-            </div>
+            <ProductCard key={p.sys.id} producto={p} vista={vista} />
           ))}
         </div>
 

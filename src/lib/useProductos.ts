@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import type { Entry, EntrySkeletonType } from 'contentful';
+import type { EntrySkeletonType } from 'contentful';
 import { client } from './contentful';
 
 interface ProductoFields {
-  nombre: string;
-  descripcion: string;
-  categoria: string;
-  marca: string;
-  slug: string;
-  especificaciones: string;
-  imagenes: {
+  nombre?: string;
+  descripcion?: unknown;
+  categoria?: string;
+  marca?: string;
+  slug?: string;
+  especificaciones?: string;
+  imagenes?: {
     fields: {
       file: {
         url: string;
@@ -23,10 +23,9 @@ interface ProductoSkeleton extends EntrySkeletonType {
   fields: ProductoFields;
 }
 
-type Producto = Entry<ProductoSkeleton>;
-
 export function useProductos() {
-  const [productos, setProductos] = useState<Producto[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [productos, setProductos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
