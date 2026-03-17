@@ -1,16 +1,9 @@
 import { useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
+import ProductCard from "../components/catalog/ProductCard";
 
-const productos = [
-  { id: 1, nombre: "Producto 1", tipo: "Máquinas", precio: 100 },
-  { id: 2, nombre: "Producto 2", tipo: "Máquinas", precio: 200 },
-  { id: 3, nombre: "Producto 3", tipo: "Pesas", precio: 50 },
-  { id: 4, nombre: "Producto 4", tipo: "Pesas", precio: 150 },
-  { id: 5, nombre: "Producto 5", tipo: "Suplementos", precio: 30 },
-  { id: 6, nombre: "Producto 6", tipo: "Suplementos", precio: 80 },
-  { id: 7, nombre: "Producto 7", tipo: "Accesorios", precio: 20 },
-  { id: 8, nombre: "Producto 8", tipo: "Accesorios", precio: 60 },
-];
+// TODO: Descomentar cuando se conecte Contentful (RF-37)
+// import { useProductos } from "../hooks/useProductos";
 
 const tipos = ["Todos", "Máquinas", "Pesas", "Suplementos", "Accesorios"];
 
@@ -20,6 +13,10 @@ export default function CatalogPage() {
   const [tipoActivo, setTipoActivo] = useState("Todos");
   const [ordenPrecio, setOrdenPrecio] = useState<"asc" | "desc" | null>(null);
 
+  // TODO: Reemplazar con esto cuando se conecte Contentful:
+  // const { productos, loading, error } = useProductos();
+  const productos: { id: number; nombre: string; tipo: string; precio?: number; imagen?: string }[] = [];
+
   const productosFiltrados = productos
     .filter((p) => {
       const coincideBusqueda = p.nombre.toLowerCase().includes(busqueda.toLowerCase());
@@ -27,8 +24,8 @@ export default function CatalogPage() {
       return coincideBusqueda && coincideTipo;
     })
     .sort((a, b) => {
-      if (ordenPrecio === "asc") return a.precio - b.precio;
-      if (ordenPrecio === "desc") return b.precio - a.precio;
+      if (ordenPrecio === "asc") return (a.precio ?? 0) - (b.precio ?? 0);
+      if (ordenPrecio === "desc") return (b.precio ?? 0) - (a.precio ?? 0);
       return 0;
     });
 
@@ -139,16 +136,14 @@ export default function CatalogPage() {
       <section className="px-6 pb-20">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
           {productosFiltrados.map((p) => (
-            <div key={p.id} className="bg-neutral-800 rounded-xl overflow-hidden">
-              <div className="bg-neutral-300 h-56 flex items-center justify-center">
-                <span className="text-black font-black text-2xl">Imagen</span>
-              </div>
-              <div className="p-4 flex flex-col gap-1">
-                <span className="text-red-500 text-sm font-semibold">{p.tipo}</span>
-                <span className="text-white text-base font-light">{p.nombre}</span>
-                <span className="text-white text-sm font-bold">${p.precio}</span>
-              </div>
-            </div>
+            <ProductCard
+              key={p.id}
+              id={p.id}
+              nombre={p.nombre}
+              tipo={p.tipo}
+              precio={p.precio}
+              imagen={p.imagen}
+            />
           ))}
         </div>
 
