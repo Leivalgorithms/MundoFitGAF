@@ -8,6 +8,7 @@ import AboutPage from "./pages/AboutPage";
 import CatalogPage from "./pages/CatalogPage";
 import FAQPage from "./pages/FAQPage";
 import TestimoniosPage from "./pages/TestimoniosPage";
+import ContactPage from "./pages/ContactPage";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/testimonios" element={<TestimoniosPage />} />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/contacto" element={<ContactPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

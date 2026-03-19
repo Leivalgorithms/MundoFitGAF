@@ -22,7 +22,7 @@ export default function ProductCard({ producto, vista }: { producto: any; vista:
   }, [imagenes.length]);
 
   return (
-    <div className={`bg-neutral-800 rounded-xl overflow-hidden ${vista === "list" ? "flex flex-row w-96" : ""}`}>
+    <div className={`bg-neutral-800 rounded-xl overflow-hidden border-2 border-transparent hover:border-red-600 transition-colors duration-200 cursor-pointer ${vista === "list" ? "flex flex-row w-96" : ""}`}>
       <div className={`bg-black flex items-center justify-center overflow-hidden ${vista === "list" ? "w-48 h-36 flex-shrink-0" : "h-56 w-full"}`}>
         <div className="relative w-full h-full">
           {imagenes.map((img, i) => (

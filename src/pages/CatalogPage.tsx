@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useProductos } from "../lib/useProductos";
 import ProductCard from "../components/layout/ProductCard";
+import Pagination from "../components/ui/Pagination";
 import { Search, SlidersHorizontal, LayoutGrid, LayoutList } from "lucide-react";
+
+const PRODUCTOS_POR_PAGINA = 12;
 
 const tipos = ["Todos", "Máquinas", "Pesas", "Suplementos", "Accesorios"];
 
@@ -12,22 +15,39 @@ export default function CatalogPage() {
   const [tipoActivo, setTipoActivo] = useState("Todos");
   const [ordenPrecio, setOrdenPrecio] = useState<"asc" | "desc" | null>(null);
   const [vista, setVista] = useState<"grid" | "list">("grid");
+  const [paginaActual, setPaginaActual] = useState(1);
 
-  const productosFiltrados = productos
-    .filter((p) => {
-      const q = busqueda.toLowerCase();
-      const coincideBusqueda =
-        p.fields.nombre?.toLowerCase()?.includes(q) ||
-        p.fields.marca?.toLowerCase()?.includes(q) ||
-        p.fields.categoria?.toLowerCase()?.includes(q);
-      const coincideTipo = tipoActivo === "Todos" || p.fields.categoria === tipoActivo;
-      return coincideBusqueda && coincideTipo;
-    })
-    .sort((a, b) => {
-      if (ordenPrecio === "asc") return a.fields.nombre?.localeCompare(b.fields.nombre) ?? 0;
-      if (ordenPrecio === "desc") return b.fields.nombre?.localeCompare(a.fields.nombre) ?? 0;
-      return 0;
-    });
+  // Filtrar y ordenar
+  const productosFiltrados = useMemo(() => {
+    return productos
+      .filter((p) => {
+        const q = busqueda.toLowerCase();
+        const coincideBusqueda =
+          p.fields.nombre?.toLowerCase()?.includes(q) ||
+          p.fields.marca?.toLowerCase()?.includes(q) ||
+          p.fields.categoria?.toLowerCase()?.includes(q);
+        const coincideTipo = tipoActivo === "Todos" || p.fields.categoria === tipoActivo;
+        return coincideBusqueda && coincideTipo;
+      })
+      .sort((a, b) => {
+        if (ordenPrecio === "asc") return a.fields.nombre?.localeCompare(b.fields.nombre) ?? 0;
+        if (ordenPrecio === "desc") return b.fields.nombre?.localeCompare(a.fields.nombre) ?? 0;
+        return 0;
+      });
+  }, [productos, busqueda, tipoActivo, ordenPrecio]);
+
+  // Paginación
+  const totalPaginas = Math.ceil(productosFiltrados.length / PRODUCTOS_POR_PAGINA);
+  const productosPagina = productosFiltrados.slice(
+    (paginaActual - 1) * PRODUCTOS_POR_PAGINA,
+    paginaActual * PRODUCTOS_POR_PAGINA
+  );
+
+  // Handlers que resetean la página al cambiar filtros
+  const handleBusqueda = (valor: string) => { setBusqueda(valor); setPaginaActual(1); };
+  const handleTipo = (tipo: string) => { setTipoActivo(tipo); setPaginaActual(1); };
+  const handleOrden = (orden: "asc" | "desc") => { setOrdenPrecio(orden); setPaginaActual(1); };
+  const handleLimpiar = () => { setTipoActivo("Todos"); setOrdenPrecio(null); setPaginaActual(1); };
 
   if (loading) return (
     <div className="bg-black min-h-screen flex items-center justify-center">
@@ -65,7 +85,7 @@ export default function CatalogPage() {
               type="text"
               placeholder="Busca productos..."
               value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
+              onChange={(e) => handleBusqueda(e.target.value)}
               className="bg-transparent text-white placeholder-neutral-400 font-light text-lg outline-none w-full"
             />
           </div>
@@ -109,7 +129,7 @@ export default function CatalogPage() {
                   {tipos.map((t) => (
                     <button
                       key={t}
-                      onClick={() => setTipoActivo(t)}
+                      onClick={() => handleTipo(t)}
                       className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors duration-200 ${
                         tipoActivo === t
                           ? "bg-red-600 text-white"
@@ -125,7 +145,7 @@ export default function CatalogPage() {
                 <p className="text-white text-sm font-bold mb-2">Orden</p>
                 <div className="flex flex-col gap-2">
                   <button
-                    onClick={() => setOrdenPrecio("asc")}
+                    onClick={() => handleOrden("asc")}
                     className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors duration-200 ${
                       ordenPrecio === "asc"
                         ? "bg-red-600 text-white"
@@ -135,7 +155,7 @@ export default function CatalogPage() {
                     Nombre: A → Z
                   </button>
                   <button
-                    onClick={() => setOrdenPrecio("desc")}
+                    onClick={() => handleOrden("desc")}
                     className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors duration-200 ${
                       ordenPrecio === "desc"
                         ? "bg-red-600 text-white"
@@ -147,7 +167,7 @@ export default function CatalogPage() {
                 </div>
               </div>
               <button
-                onClick={() => { setTipoActivo("Todos"); setOrdenPrecio(null); }}
+                onClick={handleLimpiar}
                 className="text-red-500 text-xs font-semibold hover:text-red-400 text-left"
               >
                 Limpiar filtros
@@ -161,10 +181,10 @@ export default function CatalogPage() {
       <section className="px-6 pb-20">
         <div className={
           vista === "grid"
-            ? "max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+            ? "max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6"
             : "max-w-7xl mx-auto flex flex-col gap-4"
         }>
-          {productosFiltrados.map((p) => (
+          {productosPagina.map((p) => (
             <ProductCard key={p.sys.id} producto={p} vista={vista} />
           ))}
         </div>
@@ -174,6 +194,14 @@ export default function CatalogPage() {
             No se encontraron productos.
           </p>
         )}
+
+        <div className="max-w-7xl mx-auto">
+          <Pagination
+            currentPage={paginaActual}
+            totalPages={totalPaginas}
+            onPageChange={setPaginaActual}
+          />
+        </div>
       </section>
 
     </div>
