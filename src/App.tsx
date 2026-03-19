@@ -6,6 +6,8 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ServicesPage from "./pages/ServicesPage";
 import AboutPage from "./pages/AboutPage";
 import CatalogPage from "./pages/CatalogPage";
+import FAQPage from "./pages/FAQPage";
+import TestimoniosPage from "./pages/TestimoniosPage";
 import ContactPage from "./pages/ContactPage";
 
 export default function App() {
@@ -17,6 +19,8 @@ export default function App() {
           <Route path="/nosotros" element={<AboutPage />} />
           <Route path="/servicios" element={<ServicesPage />} />
           <Route path="/catalogo" element={<CatalogPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/testimonios" element={<TestimoniosPage />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/contacto" element={<ContactPage />} />
         </Route>
