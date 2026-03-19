@@ -4,6 +4,7 @@ import logo from "../../assets/logo.png";
 const quickLinks = [
   { label: "Contáctanos", to: "/contacto" },
   { label: "FAQ", to: "/faq" },
+  { label: "Testimonios", to: "/testimonios" },
 ];
 
 const contactLinks = [
