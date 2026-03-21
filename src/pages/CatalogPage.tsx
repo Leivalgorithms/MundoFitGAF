@@ -6,7 +6,9 @@ import { Search, SlidersHorizontal, LayoutGrid, LayoutList } from "lucide-react"
 
 const PRODUCTOS_POR_PAGINA = 12;
 
-const tipos = ["Todos", "Máquinas", "Pesas", "Suplementos", "Accesorios"];
+const tipos = [
+  "Todos", "Máquinas de Cardio", "Máquinas de Fuerza", "Pesas", "Mobiliario", "Accesorios", "Segunda",
+];
 
 export default function CatalogPage() {
   const { productos, loading, error } = useProductos();
@@ -17,7 +19,6 @@ export default function CatalogPage() {
   const [vista, setVista] = useState<"grid" | "list">("grid");
   const [paginaActual, setPaginaActual] = useState(1);
 
-  // Filtrar y ordenar
   const productosFiltrados = useMemo(() => {
     return productos
       .filter((p) => {
@@ -26,7 +27,8 @@ export default function CatalogPage() {
           p.fields.nombre?.toLowerCase()?.includes(q) ||
           p.fields.marca?.toLowerCase()?.includes(q) ||
           p.fields.categoria?.toLowerCase()?.includes(q);
-        const coincideTipo = tipoActivo === "Todos" || p.fields.categoria === tipoActivo;
+        const coincideTipo = tipoActivo === "Todos" ||
+          p.fields.categoria?.toLowerCase() === tipoActivo.toLowerCase();
         return coincideBusqueda && coincideTipo;
       })
       .sort((a, b) => {
@@ -36,14 +38,12 @@ export default function CatalogPage() {
       });
   }, [productos, busqueda, tipoActivo, ordenPrecio]);
 
-  // Paginación
   const totalPaginas = Math.ceil(productosFiltrados.length / PRODUCTOS_POR_PAGINA);
   const productosPagina = productosFiltrados.slice(
     (paginaActual - 1) * PRODUCTOS_POR_PAGINA,
     paginaActual * PRODUCTOS_POR_PAGINA
   );
 
-  // Handlers que resetean la página al cambiar filtros
   const handleBusqueda = (valor: string) => { setBusqueda(valor); setPaginaActual(1); };
   const handleTipo = (tipo: string) => { setTipoActivo(tipo); setPaginaActual(1); };
   const handleOrden = (orden: "asc" | "desc") => { setOrdenPrecio(orden); setPaginaActual(1); };
@@ -76,10 +76,10 @@ export default function CatalogPage() {
 
       {/* ── BUSCADOR + VISTA + FILTRO ── */}
       <section className="px-6 pb-8">
-        <div className="max-w-7xl mx-auto flex items-center gap-4 relative">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center items-start gap-3 relative">
 
           {/* Barra de búsqueda */}
-          <div className="bg-neutral-800 rounded-xl flex items-center px-6 gap-4 h-16 flex-1">
+          <div className="bg-neutral-800 rounded-xl flex items-center px-6 gap-4 h-16 w-full flex-1">
             <Search size={24} className="text-white" />
             <input
               type="text"
@@ -90,39 +90,41 @@ export default function CatalogPage() {
             />
           </div>
 
-          {/* Botón vista grid */}
-          <button
-            onClick={() => setVista("grid")}
-            className={`h-16 w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
-              vista === "grid" ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
-            }`}
-          >
-            <LayoutGrid size={22} className="text-white" />
-          </button>
+          {/* Botones — fila debajo en móvil, al lado en desktop */}
+          <div className="flex items-center gap-3 justify-start">
 
-          {/* Botón vista lista */}
-          <button
-            onClick={() => setVista("list")}
-            className={`h-16 w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
-              vista === "list" ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
-            }`}
-          >
-            <LayoutList size={22} className="text-white" />
-          </button>
+            <button
+              onClick={() => setVista("grid")}
+              className={`h-10 w-10 md:h-16 md:w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+                vista === "grid" ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
+              }`}
+            >
+              <LayoutGrid size={22} className="text-white" />
+            </button>
 
-          {/* Botón filtro */}
-          <button
-            onClick={() => setFiltroAbierto(!filtroAbierto)}
-            className={`h-16 w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
-              filtroAbierto ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
-            }`}
-          >
-            <SlidersHorizontal size={22} className="text-white" />
-          </button>
+            <button
+              onClick={() => setVista("list")}
+              className={`h-10 w-10 md:h-16 md:w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+                vista === "list" ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
+              }`}
+            >
+              <LayoutList size={22} className="text-white" />
+            </button>
+
+            <button
+              onClick={() => setFiltroAbierto(!filtroAbierto)}
+              className={`h-10 w-10 md:h-16 md:w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+                filtroAbierto ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
+              }`}
+            >
+              <SlidersHorizontal size={22} className="text-white" />
+            </button>
+
+          </div>
 
           {/* Dropdown filtros */}
           {filtroAbierto && (
-            <div className="absolute top-20 right-0 bg-neutral-800 rounded-xl p-5 z-50 w-64 flex flex-col gap-4 shadow-xl">
+            <div className="absolute top-28 md:top-20 right-0 bg-neutral-800 rounded-xl p-5 z-50 w-64 flex flex-col gap-4 shadow-xl">
               <div>
                 <p className="text-white text-sm font-bold mb-2">Categoría</p>
                 <div className="flex flex-wrap gap-2">
