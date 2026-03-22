@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -51,6 +52,15 @@ const features = [
 
 export default function HomePage() {
   return (
+    <>
+      <Helmet>
+        <title>Mundo Fit — Equipos de Gimnasio en Costa Rica</title>
+        <meta name="description" content="Mundo Fit es tu tienda de equipos de gimnasio en Costa Rica. Máquinas de cardio, fuerza, pesas y accesorios profesionales. Cotiza por WhatsApp." />
+        <meta property="og:title" content="Mundo Fit — Equipos de Gimnasio en Costa Rica" />
+        <meta property="og:description" content="Mundo Fit es tu tienda de equipos de gimnasio en Costa Rica. Máquinas de cardio, fuerza, pesas y accesorios profesionales. Cotiza por WhatsApp." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/og-image.jpg" />
+      </Helmet>
     <div className="flex flex-col">
 
       {/* ── HERO ── */}
@@ -66,7 +76,7 @@ export default function HomePage() {
             <p className="text-white text-2xl font-bold tracking-widest uppercase mb-1">
               <img src={logo} alt="Mundo Fit" className="h-25 w-auto" />
             </p>
-            <h1 className="text-white text-5xl font-extrabold leading-tight">
+            <h1 className="text-white text-3xl md:text-5xl font-extrabold leading-tight">
               Equipa tu
               <br />
               <span className="text-red-600">Gimnasio</span>
@@ -162,5 +172,6 @@ export default function HomePage() {
       </section>
 
     </div>
+    </>
   );
 }

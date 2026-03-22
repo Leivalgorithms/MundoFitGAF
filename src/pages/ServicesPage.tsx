@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import {
   PenTool,
@@ -89,6 +90,15 @@ const process = [
 
 export default function ServicesPage() {
   return (
+    <>
+      <Helmet>
+        <title>Servicios | Mundo Fit</title>
+        <meta name="description" content="Mundo Fit ofrece venta, transporte y armado de equipos de gimnasio en Costa Rica. Descubre todos nuestros servicios." />
+        <meta property="og:title" content="Servicios | Mundo Fit" />
+        <meta property="og:description" content="Mundo Fit ofrece venta, transporte y armado de equipos de gimnasio en Costa Rica. Descubre todos nuestros servicios." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/og-image.jpg" />
+      </Helmet>
     <div className="flex flex-col">
 
       {/* ── HERO ── */}
@@ -98,7 +108,7 @@ export default function ServicesPage() {
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/100 via-black/90 to-transparent" />
         <div className="relative z-10 text-center px-6 py-16">
-          <h1 className="text-white text-4xl font-extrabold">Nuestros Servicios</h1>
+          <h1 className="text-white text-2xl md:text-4xl font-extrabold">Nuestros Servicios</h1>
           <p className="text-neutral-300 text-sm mt-3">
             Soluciones integrales para tu espacio de entrenamiento, de inicio a fin.
           </p>
@@ -190,5 +200,6 @@ export default function ServicesPage() {
       </section>
 
     </div>
+    </>
   );
 }

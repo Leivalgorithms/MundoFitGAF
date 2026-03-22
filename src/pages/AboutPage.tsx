@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { Star, UserCheck, Handshake, Lightbulb } from "lucide-react";
 import heroImage from "../assets/Gym About.png";
 import historyImage from "../assets/Gym Equipment.jpg";
@@ -33,6 +34,15 @@ const stats = [
 
 export default function AboutPage() {
   return (
+    <>
+      <Helmet>
+        <title>Nosotros | Mundo Fit</title>
+        <meta name="description" content="Conoce la historia de Mundo Fit, empresa costarricense dedicada a la venta de equipos de gimnasio profesional para hogares y negocios." />
+        <meta property="og:title" content="Nosotros | Mundo Fit" />
+        <meta property="og:description" content="Conoce la historia de Mundo Fit, empresa costarricense dedicada a la venta de equipos de gimnasio profesional para hogares y negocios." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/og-image.jpg" />
+      </Helmet>
     <div className="flex flex-col bg-black">
 
       {/* ── HERO ── */}
@@ -40,9 +50,9 @@ export default function AboutPage() {
         className="relative w-full min-h-56 flex items-center justify-center bg-cover bg-center"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-black/100 via-black/90 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-black via-black/90 to-transparent" />
         <div className="relative z-10 text-center px-6 py-16">
-          <h1 className="text-white text-4xl font-extrabold">Sobre Nosotros</h1>
+          <h1 className="text-white text-2xl md:text-4xl font-extrabold">Sobre Nosotros</h1>
           <p className="text-neutral-300 text-sm mt-2 max-w-sm mx-auto">
             Más de 10 años transformando espacios en verdaderos centros de entrenamiento profesionales.
           </p>
@@ -135,10 +145,10 @@ export default function AboutPage() {
 
       {/* ── ESTADÍSTICAS ── */}
       <section className="bg-red-600 py-14">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-8">
           {stats.map((s) => (
             <div key={s.label} className="flex flex-col items-center text-center gap-1">
-              <span className="text-white text-5xl font-extrabold">{s.value}</span>
+              <span className="text-white text-4xl sm:text-5xl font-extrabold">{s.value}</span>
               <span className="text-red-100 text-sm font-medium">{s.label}</span>
             </div>
           ))}
@@ -146,5 +156,6 @@ export default function AboutPage() {
       </section>
 
     </div>
+    </>
   );
 }
