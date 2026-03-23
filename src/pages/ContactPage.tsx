@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -46,6 +47,15 @@ const contactInfo = [
 
 export default function ContactPage() {
   return (
+    <>
+      <Helmet>
+        <title>Contacto | Mundo Fit</title>
+        <meta name="description" content="Contáctanos en Mundo Fit. Llena nuestro formulario o escríbenos por WhatsApp. Estamos en San Pedro, Montes de Oca, Costa Rica." />
+        <meta property="og:title" content="Contacto | Mundo Fit" />
+        <meta property="og:description" content="Contáctanos en Mundo Fit. Llena nuestro formulario o escríbenos por WhatsApp. Estamos en San Pedro, Montes de Oca, Costa Rica." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/og-image.jpg" />
+      </Helmet>
     <div className="bg-black min-h-screen">
 
       {/* ── PAGE HEADER ── */}
@@ -55,7 +65,7 @@ export default function ContactPage() {
           <p className="text-neutral-500 text-xs tracking-widest uppercase">
             Inicio / Contacto
           </p>
-          <h1 className="text-white text-4xl font-extrabold">
+          <h1 className="text-white text-2xl md:text-4xl font-extrabold">
             Ponete en{" "}
             <span className="text-red-600">Contacto</span>
           </h1>
@@ -144,7 +154,7 @@ export default function ContactPage() {
 
           {/* ── RIGHT: Form ── */}
           <div className="lg:col-span-3">
-            <div className="bg-neutral-900 rounded-xl p-8">
+            <div className="bg-neutral-900 rounded-xl p-4 md:p-8">
               <h2 className="text-white text-lg font-bold mb-6">
                 Envianos un mensaje
               </h2>
@@ -155,5 +165,6 @@ export default function ContactPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

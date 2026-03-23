@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { useState, useMemo } from "react";
 import { useProductos } from "../lib/useProductos";
 import ProductCard from "../components/layout/ProductCard";
@@ -62,13 +63,22 @@ export default function CatalogPage() {
   );
 
   return (
+    <>
+      <Helmet>
+        <title>Catálogo de Productos | Mundo Fit</title>
+        <meta name="description" content="Explora nuestro catálogo completo de equipos de gimnasio: máquinas de cardio y fuerza, pesas, barras, discos y más. Equipos nuevos y de segunda." />
+        <meta property="og:title" content="Catálogo de Productos | Mundo Fit" />
+        <meta property="og:description" content="Explora nuestro catálogo completo de equipos de gimnasio: máquinas de cardio y fuerza, pesas, barras, discos y más. Equipos nuevos y de segunda." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/og-image.jpg" />
+      </Helmet>
     <div className="bg-black min-h-screen flex flex-col">
 
       {/* ── HEADER ── */}
       <section className="bg-black pt-16 pb-10 px-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-white text-5xl font-black">Catálogo de Productos</h1>
-          <p className="text-white font-light text-xl mt-3">
+          <h1 className="text-white text-3xl md:text-5xl font-black">Catálogo de Productos</h1>
+          <p className="text-white font-light text-base md:text-xl mt-3">
             Descubre nuestro catálogo completo de equipamiento profesional
           </p>
         </div>
@@ -95,7 +105,7 @@ export default function CatalogPage() {
 
             <button
               onClick={() => setVista("grid")}
-              className={`h-10 w-10 md:h-16 md:w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+              className={`h-12 w-12 rounded-xl flex items-center justify-center transition-colors duration-200 ${
                 vista === "grid" ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
               }`}
             >
@@ -104,7 +114,7 @@ export default function CatalogPage() {
 
             <button
               onClick={() => setVista("list")}
-              className={`h-10 w-10 md:h-16 md:w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+              className={`h-12 w-12 rounded-xl flex items-center justify-center transition-colors duration-200 ${
                 vista === "list" ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
               }`}
             >
@@ -113,7 +123,7 @@ export default function CatalogPage() {
 
             <button
               onClick={() => setFiltroAbierto(!filtroAbierto)}
-              className={`h-10 w-10 md:h-16 md:w-16 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+              className={`h-12 w-12 rounded-xl flex items-center justify-center transition-colors duration-200 ${
                 filtroAbierto ? "bg-red-600" : "bg-neutral-800 hover:bg-neutral-700"
               }`}
             >
@@ -124,7 +134,7 @@ export default function CatalogPage() {
 
           {/* Dropdown filtros */}
           {filtroAbierto && (
-            <div className="absolute top-28 md:top-20 right-0 bg-neutral-800 rounded-xl p-5 z-50 w-64 flex flex-col gap-4 shadow-xl">
+            <div className="absolute top-28 md:top-20 right-0 bg-neutral-800 rounded-xl p-5 z-50 w-full md:w-64 flex flex-col gap-4 shadow-xl">
               <div>
                 <p className="text-white text-sm font-bold mb-2">Categoría</p>
                 <div className="flex flex-wrap gap-2">
@@ -183,7 +193,7 @@ export default function CatalogPage() {
       <section className="px-6 pb-20">
         <div className={
           vista === "grid"
-            ? "max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6"
+            ? "max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             : "max-w-7xl mx-auto flex flex-col gap-4"
         }>
           {productosPagina.map((p) => (
@@ -207,5 +217,6 @@ export default function CatalogPage() {
       </section>
 
     </div>
+    </>
   );
 }
