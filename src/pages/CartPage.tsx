@@ -204,7 +204,7 @@ export default function CartPage() {
                     onClick={handleCotizar}
                     className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 mt-2"
                   >
-                    Solicitar cotización por WhatsApp ↗
+                    Solicitar cotización por WhatsApp
                   </button>
                 </div>
               </div>
