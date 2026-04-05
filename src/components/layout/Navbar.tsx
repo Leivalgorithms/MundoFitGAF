@@ -10,7 +10,6 @@ const navLinks = [
   { label: "Nosotros", to: "/nosotros" },
   { label: "Servicios", to: "/servicios" },
   { label: "Galería", to: "/galeria" },
-  { label: "Blog", to: "/blog" },
 ];
 
 export default function Navbar() {

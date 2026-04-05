@@ -12,6 +12,7 @@ import TestimoniosPage from "./pages/TestimoniosPage";
 import ContactPage from "./pages/ContactPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CartPage from "./pages/CartPage";
+import GalleryPage from "./pages/GalleryPage";
 import ScrollToTop from "./components/ScrollToTop";
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/faq" element={<FAQPage />} />
             <Route path="/testimonios" element={<TestimoniosPage />} />
             <Route path="/contacto" element={<ContactPage />} />
+            <Route path="/galeria" element={<GalleryPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
