@@ -4,11 +4,12 @@ import { client } from './contentful';
 
 interface ProductoFields {
   nombre?: string;
-  descripcion?: unknown;
+  descripcion?: any;
   categoria?: string;
   marca?: string;
   slug?: string;
   especificaciones?: string;
+  caracteristicas?: string[];
   imagenes?: {
     fields: {
       file: {
