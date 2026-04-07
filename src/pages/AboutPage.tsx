@@ -29,7 +29,7 @@ const values = [
 const stats = [
   { value: "X +", label: "Años de experiencia" },
   { value: "500 +", label: "Proyectos completados" },
-  { value: "98%", label: "Clientes satisfechos" },
+  { value: "100%", label: "Compromiso garantizado" },
 ];
 
 export default function AboutPage() {
