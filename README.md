@@ -71,6 +71,15 @@ La aplicación se despliega automáticamente en **Netlify** al realizar cambios 
 
 ## Desarrollado por
 
-**Leivalgorithms**  
+**Leivalgorithms**
+**rodrixdere**
+**Mauledji**
+**FerCoding21**
 Desarrollo de software a medida  
 [github.com/Leivalgorithms](https://github.com/Leivalgorithms)
+[github.com/rodrixdere](https://github.com/rodrixdere)
+[github.com/Mauledji](https://github.com/Mauledji)
+[github.com/FerCoding21](https://github.com/FerCoding21)
+
+
+
