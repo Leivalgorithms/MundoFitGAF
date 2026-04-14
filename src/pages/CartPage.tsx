@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
+import { crearSolicitud } from "../lib/solicitudes";
 
 export default function CartPage() {
   const navigate = useNavigate();
@@ -18,11 +19,25 @@ export default function CartPage() {
       (item) =>
         `• ${item.nombre}${item.cantidad > 1 ? ` x${item.cantidad}` : ""}\n  ${base}/catalogo/${item.slug}`
     );
-    const mensaje =
+    const mensajeWA =
       `Hola, me gustaría cotizar los siguientes productos:\n\n` +
       lineas.join("\n\n") +
       `\n\nPor favor bríndeme información sobre disponibilidad y precios.`;
-    const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+
+    const listaProductos = items
+      .map((i) => `${i.nombre}${i.cantidad > 1 ? ` x${i.cantidad}` : ""}`)
+      .join(", ");
+
+    crearSolicitud({
+      nombre:   "Anónimo",
+      correo:   "-",
+      asunto:   "Solicitud de cotización de carrito vía WhatsApp",
+      mensaje:  listaProductos,
+      tipo:     "cotizacion",
+      producto: listaProductos,
+    }).catch((err) => console.error("[Web3Forms] Error al guardar cotización del carrito:", err));
+
+    const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensajeWA)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 

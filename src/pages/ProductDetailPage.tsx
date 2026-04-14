@@ -14,6 +14,7 @@ import { useCartStore } from "../store/cartStore";
 import ProductCard from "../components/layout/ProductCard";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { SimilarProductsComparison } from "../components/SimilarProductsComparison";
+import { crearSolicitud } from "../lib/solicitudes";
 
 export default function ProductDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -62,7 +63,7 @@ export default function ProductDetailPage() {
     if (!producto) return;
     const numero = import.meta.env.VITE_WHATSAPP_NUMBER;
     const link = window.location.origin + "/catalogo/" + producto.fields.slug;
-    const mensaje =
+    const mensajeWA =
       "Hola, me interesa cotizar el siguiente producto:\n\n*" +
       producto.fields.nombre +
       "*\nMarca: " +
@@ -70,7 +71,17 @@ export default function ProductDetailPage() {
       "\n" +
       link +
       "\n\nPor favor bríndeme más información.";
-    const url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensaje);
+
+    crearSolicitud({
+      nombre:   "Anónimo",
+      correo:   "-",
+      asunto:   "Solicitud de cotización vía WhatsApp",
+      mensaje:  `Producto: ${producto.fields.nombre} | Marca: ${producto.fields.marca} | URL: ${link}`,
+      tipo:     "cotizacion",
+      producto: producto.fields.nombre,
+    }).catch((err) => console.error("[Web3Forms] Error al guardar cotización del producto:", err));
+
+    const url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensajeWA);
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
