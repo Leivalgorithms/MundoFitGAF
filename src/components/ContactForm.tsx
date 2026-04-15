@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import emailjs from "@emailjs/browser";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Send, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { crearSolicitud } from "../lib/solicitudes";
 
 
 const EMAILJS_SERVICE_ID  = "service_kcbzs7z";
@@ -10,6 +11,7 @@ const EMAILJS_PUBLIC_KEY  = "ktcO8g1Wwhz91LjM2";
 
 
 const RECAPTCHA_SITE_KEY = "6LfIQo8sAAAAAOF4dP_EMm2tkq-PaSr9_FKCLOCZ";
+
 
 
 interface FormFields {
@@ -136,6 +138,14 @@ export default function ContactForm({ compact = false }: ContactFormProps) {
         },
         EMAILJS_PUBLIC_KEY
       );
+      await crearSolicitud({
+        nombre:   fields.name,
+        correo:   fields.email,
+        telefono: fields.phone || undefined,
+        asunto:   fields.subject,
+        mensaje:  fields.message,
+        tipo:     "contacto",
+      });
       setStatus("success");
       setFields({ name: "", email: "", phone: "", subject: "", message: "" });
       setTouched(new Set());
@@ -265,7 +275,6 @@ export default function ContactForm({ compact = false }: ContactFormProps) {
             <option value="" disabled>
               Seleccioná un asunto
             </option>
-            <option value="Cotización de equipos">Cotización de equipos</option>
             <option value="Consulta sobre productos">Consulta sobre productos</option>
             <option value="Servicio técnico / Garantía">Servicio técnico / Garantía</option>
             <option value="Envío e instalación">Envío e instalación</option>
