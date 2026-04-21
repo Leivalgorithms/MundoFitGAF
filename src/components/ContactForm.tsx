@@ -1,13 +1,13 @@
-import { useState, useRef, useCallback } from "react";
 import emailjs from "@emailjs/browser";
+import { CheckCircle, Loader2, Send, XCircle } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Send, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { crearSolicitud } from "../lib/solicitudes";
 
 
-const EMAILJS_SERVICE_ID  = "service_kcbzs7z";
+const EMAILJS_SERVICE_ID = "service_kcbzs7z";
 const EMAILJS_TEMPLATE_ID = "template_weni1dp";
-const EMAILJS_PUBLIC_KEY  = "ktcO8g1Wwhz91LjM2";
+const EMAILJS_PUBLIC_KEY = "ktcO8g1Wwhz91LjM2";
 
 
 const RECAPTCHA_SITE_KEY = "6LfIQo8sAAAAAOF4dP_EMm2tkq-PaSr9_FKCLOCZ";
@@ -47,7 +47,7 @@ function validate(fields: FormFields, captchaToken: string | null): FormErrors {
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email))
     errors.email = "Ingresá un correo válido.";
 
-  if (fields.phone && !/^[\d\s\+\-\(\)]{7,15}$/.test(fields.phone))
+  if (fields.phone && !/^[\d\s+\-()]{7,15}$/.test(fields.phone))
     errors.phone = "Número de teléfono inválido.";
 
   if (!fields.subject.trim())
@@ -66,7 +66,7 @@ function validate(fields: FormFields, captchaToken: string | null): FormErrors {
 
 
 interface ContactFormProps {
-  
+
   compact?: boolean;
 }
 
@@ -78,13 +78,13 @@ export default function ContactForm({ compact = false }: ContactFormProps) {
     subject: "",
     message: "",
   });
-  const [errors, setErrors]           = useState<FormErrors>({});
-  const [touched, setTouched]         = useState<Set<keyof FormFields>>(new Set());
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Set<keyof FormFields>>(new Set());
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const [status, setStatus]           = useState<SubmitStatus>("idle");
-  const recaptchaRef                  = useRef<ReCAPTCHA>(null);
+  const [status, setStatus] = useState<SubmitStatus>("idle");
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  
+
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
@@ -117,7 +117,7 @@ export default function ContactForm({ compact = false }: ContactFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     setTouched(new Set(Object.keys(fields) as (keyof FormFields)[]));
     const allErrors = validate(fields, captchaToken);
     setErrors(allErrors);
@@ -129,22 +129,22 @@ export default function ContactForm({ compact = false }: ContactFormProps) {
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         {
-          from_name:    fields.name,
-          from_email:   fields.email,
-          phone:        fields.phone || "No proporcionado",
-          subject:      fields.subject,
-          message:      fields.message,
+          from_name: fields.name,
+          from_email: fields.email,
+          phone: fields.phone || "No proporcionado",
+          subject: fields.subject,
+          message: fields.message,
           "g-recaptcha-response": captchaToken,
         },
         EMAILJS_PUBLIC_KEY
       );
       await crearSolicitud({
-        nombre:   fields.name,
-        correo:   fields.email,
+        nombre: fields.name,
+        correo: fields.email,
         telefono: fields.phone || undefined,
-        asunto:   fields.subject,
-        mensaje:  fields.message,
-        tipo:     "contacto",
+        asunto: fields.subject,
+        mensaje: fields.message,
+        tipo: "contacto",
       });
       setStatus("success");
       setFields({ name: "", email: "", phone: "", subject: "", message: "" });
@@ -159,13 +159,13 @@ export default function ContactForm({ compact = false }: ContactFormProps) {
 
   const inputBase =
     "w-full bg-neutral-800 border rounded px-4 py-3 text-sm text-white placeholder-neutral-500 focus:outline-none focus:ring-2 transition-colors duration-200";
-  const inputOk    = `${inputBase} border-neutral-700 focus:border-red-500 focus:ring-red-500/20`;
+  const inputOk = `${inputBase} border-neutral-700 focus:border-red-500 focus:ring-red-500/20`;
   const inputError = `${inputBase} border-red-500 focus:border-red-500 focus:ring-red-500/30`;
 
   const fieldClass = (key: keyof FormFields) =>
     errors[key] ? inputError : inputOk;
 
-  
+
   if (status === "success") {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-14 text-center">
