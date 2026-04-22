@@ -13,7 +13,7 @@ export default function CartPage() {
   const [confirmarLimpiar, setConfirmarLimpiar] = useState(false);
 
   const handleCotizar = () => {
-    const numero = import.meta.env.VITE_WHATSAPP_NUMBER;
+    const numero = 50684803030;
     const base = window.location.origin;
     const lineas = items.map(
       (item) =>

@@ -22,14 +22,14 @@ const contactInfo = [
   {
     icon: <Phone size={20} strokeWidth={1.8} />,
     label: "Teléfono / WhatsApp",
-    value: "+506 0000-0000",
-    href: "https://wa.me/50600000000",
+    value: "+506 8480-3030",
+    href: "https://wa.me/50684803030",
   },
   {
     icon: <Mail size={20} strokeWidth={1.8} />,
     label: "Correo electrónico",
-    value: "info@mundofit.cr",
-    href: "mailto:info@mundofit.cr",
+    value: "jcagimnasio@hotmail.com",
+    href: "mailto:jcagimnasio@hotmail.com",
   },
   {
     icon: <MapPin size={20} strokeWidth={1.8} />,
