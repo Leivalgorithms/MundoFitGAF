@@ -27,7 +27,7 @@ const values = [
 ];
 
 const stats = [
-  { value: "X +", label: "Años de experiencia" },
+  { value: "15 +", label: "Años de experiencia" },
   { value: "500 +", label: "Proyectos completados" },
   { value: "100%", label: "Compromiso garantizado" },
 ];

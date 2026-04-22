@@ -8,8 +8,8 @@ const quickLinks = [
 ];
 
 const contactLinks = [
-  { label: "WhatsApp", href: "https://wa.me/50600000000" },
-  { label: "Correo", href: "mailto:info@mundofit.cr" },
+  { label: "WhatsApp", href: "https://wa.me/50684803030" },
+  { label: "Correo", href: "mailto:jcagimnasio@hotmail.com" },
   { label: "Facebook", href: "https://www.facebook.com/maquinasaccesoriosgym" },
 ];
 

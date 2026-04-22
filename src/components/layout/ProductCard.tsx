@@ -48,12 +48,12 @@ export default function ProductCard({ producto, vista }: { producto: any; vista:
 
   const handleCotizar = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const numero = import.meta.env.VITE_WHATSAPP_NUMBER;
+    const numero = "50684803030";
     const link = `${window.location.origin}/catalogo/${producto.fields.slug}`;
     const mensaje = `Hola, me interesa cotizar el siguiente producto:\n\n*${producto.fields.nombre}*\n${link}\n\nPor favor bríndeme más información.`;
     const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
     window.open(url, "_blank", "noopener,noreferrer");
-  };
+};
 
   if (vista === "list") {
     return (
